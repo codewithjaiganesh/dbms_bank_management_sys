@@ -7,7 +7,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const path = require("path");
 const crypto = require("crypto");
 
 const app = express();
