@@ -1,4 +1,6 @@
 require("dotenv").config();
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const mysql = require("mysql2/promise");
 const bcrypt = require("bcryptjs");
@@ -24,9 +26,12 @@ const pool = mysql.createPool({
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME || "banksphere",
-  ssl: process.env.DB_HOST
-    ? { rejectUnauthorized: true }
-    : undefined,
+ ssl: process.env.DB_HOST
+  ? {
+      ca: fs.readFileSync(path.join(__dirname, "certs", "ca.pem")),
+      rejectUnauthorized: true
+    }
+  : undefined,
   waitForConnections: true,
   connectionLimit: 10,
   decimalNumbers: true
