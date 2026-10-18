@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BankSphere | Bank Management System</title>
+  <meta name="theme-color" content="#10233f" />
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/build/face-api.min.js"></script>
+  <style>
+    :root{--navy:#10233f;--blue:#2459d3;--bg:#f3f6fb;--text:#172338;--muted:#64748b;--line:#e5eaf2;--white:#fff;--green:#0b8f62;--red:#c0394d}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:var(--blue);color:#fff;font-weight:650}button.secondary{background:#e8eefb;color:var(--navy)}button.danger{background:var(--red)}button:disabled{opacity:.55;cursor:not-allowed}
+    .hidden{display:none!important}.login-wrap{min-height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(135deg,#10233f,#214b91)}.login-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:30px;box-shadow:0 25px 80px #06152a55}.brand{font-size:24px;font-weight:850;color:var(--navy);letter-spacing:-.6px}.brand span{color:var(--blue)}.muted{color:var(--muted)}.login-card h1{font-size:26px;margin:25px 0 6px}.field{display:flex;flex-direction:column;gap:7px;margin:13px 0}.field label{font-size:13px;font-weight:700;color:#334155}.field input,.field select{width:100%;border:1px solid #d6deeb;background:#fff;border-radius:10px;padding:12px;outline:none}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2459d31a}.wide{width:100%;margin-top:8px}.demo-creds{font-size:12px;background:#f1f5fb;padding:12px;border-radius:10px;margin-top:18px;line-height:1.7;overflow-wrap:anywhere}
+    .app{min-height:100vh;display:grid;grid-template-columns:245px 1fr}.sidebar{background:var(--navy);color:#fff;padding:24px 15px;display:flex;flex-direction:column;gap:24px}.sidebar .brand{color:#fff;padding:0 10px}.sidebar .brand span{color:#8bb2ff}.side-label{font-size:11px;color:#9caec9;text-transform:uppercase;letter-spacing:1.4px;padding:0 12px}.nav{display:grid;gap:6px}.nav button{display:flex;gap:12px;align-items:center;text-align:left;background:transparent;color:#c7d2e4;font-weight:550}.nav button.active,.nav button:hover{background:#ffffff18;color:#fff}.side-bottom{margin-top:auto;font-size:12px;color:#9caec9;padding:10px}.main{min-width:0}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:15px}.topbar h2{font-size:19px;margin:0}.user-chip{display:flex;align-items:center;gap:10px;font-size:13px}.avatar{height:36px;width:36px;border-radius:50%;background:#e0eaff;color:#244db0;display:grid;place-items:center;font-weight:800}.content{padding:28px;max-width:1500px;margin:auto}.welcome{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.welcome h1{margin:0 0 6px;font-size:26px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 5px 18px #18365b05}.stat .label{font-size:13px;color:var(--muted)}.stat .value{font-size:27px;font-weight:800;margin-top:10px;overflow-wrap:anywhere}.stat .hint{font-size:12px;color:var(--green);margin-top:6px}.section-title{font-size:17px;margin:0 0 16px}.two-col{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px}.panel{margin-top:18px}.two-col .panel{margin-top:0}.actions{display:flex;flex-wrap:wrap;gap:10px}.actions button{font-size:13px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th,td{text-align:left;padding:13px 12px;border-bottom:1px solid var(--line)}th{color:#64748b;font-weight:700;background:#f8faff}tbody tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#e4f8ef;color:#08744f;font-size:11px;font-weight:750}.pill.red{background:#ffe9ec;color:#a62c3f}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.form-grid .field{margin:6px 0 13px}.notice{padding:12px 14px;border-radius:10px;background:#edf4ff;color:#23447c;font-size:13px;margin:12px 0}.message{padding:12px;border-radius:10px;margin:12px 0;font-size:13px}.message.ok{background:#e6f8ef;color:#08744f}.message.err{background:#fff0f1;color:#a62c3f}.qr-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.qr-box{border:1px dashed #b8c6dc;border-radius:14px;padding:18px;text-align:center;min-height:180px;display:grid;place-items:center;background:#fbfdff}.qr-box canvas,.qr-box img{margin:auto}.mobile-tabs{display:none}.small{font-size:12px}.empty{padding:28px;text-align:center;color:var(--muted)}#reader{max-width:360px;margin:12px auto}footer{text-align:center;color:#7a879b;font-size:11px;padding:22px}
+    @media(max-width:1050px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}.app{grid-template-columns:210px 1fr}.content{padding:20px}}
+    @media(max-width:700px){.app{display:block;padding-bottom:70px}.sidebar{display:none}.topbar{height:64px;padding:0 16px}.topbar h2{font-size:16px}.content{padding:17px 13px}.welcome{align-items:flex-start;flex-direction:column}.welcome h1{font-size:23px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px}.stat .value{font-size:21px}.panel{padding:15px;margin-top:13px}.two-col{gap:13px;margin-top:13px}.form-grid,.qr-layout{grid-template-columns:1fr}.mobile-tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:7px;z-index:10;justify-content:space-around}.mobile-tabs button{background:transparent;color:#52627a;padding:7px 9px;font-size:11px;display:grid;justify-items:center;gap:3px}.mobile-tabs button.active{color:var(--blue)}.user-chip .user-name{display:none}.topbar .avatar{height:32px;width:32px}.actions button{flex:1}.table-wrap table{font-size:12px}.table-wrap th,.table-wrap td{padding:11px 9px}}
+  </style>
+</head>
+<body>
+  <section id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <div class="brand">Bank<span>Sphere</span></div>
+      <p class="muted">Bank Management System · Academic Demo</p>
+      <h1>Welcome back</h1>
+      <p class="muted">Sign in to continue to your banking workspace.</p>
+      <form id="loginForm">
+        <div class="field"><label for="email">Email address</label><input id="email" type="email" required autocomplete="username" placeholder="you@example.com"></div>
+        <div class="field"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password" placeholder="Enter your password"></div>
+        <div id="loginMessage"></div>
+        <button class="wide" type="submit">Sign in securely</button>
+      </form>
+      <div class="demo-creds"><strong>Demo credentials</strong><br>Admin: admin@banksphere.demo / Admin@12345<br>Customer: rahul@banksphere.demo / User@12345<br>Customer: priya@banksphere.demo / User@12345</div>
+      <p class="small muted">Demo only. Do not use real banking credentials or personal data.</p>
+    </div>
+  </section>
+
+  <div id="appScreen" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">Bank<span>Sphere</span></div>
+      <div><div class="side-label">Workspace</div><nav id="sideNav" class="nav"></nav></div>
+      <div class="side-bottom">Academic DBMS Project<br>Secure demo environment</div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><h2 id="topTitle">Dashboard</h2><div class="user-chip"><div class="avatar" id="avatar">BS</div><div><div class="user-name" id="userName">User</div><div id="userRole" class="muted small">Customer</div></div><button id="logoutBtn" class="secondary">Log out</button></div></header>
+      <div class="content">
+        <div id="page-dashboard" class="page"></div>
+        <div id="page-customers" class="page hidden"></div>
+        <div id="page-accounts" class="page hidden"></div>
+        <div id="page-transactions" class="page hidden"></div>
+        <div id="page-operations" class="page hidden"></div>
+        <div id="page-qr" class="page hidden"></div>
+        <div id="page-facepay" class="page hidden"></div>
+      </div>
+      <footer>BankSphere Academic Demo · No real money or UPI payments are processed.</footer>
+    </main>
+    <nav id="mobileNav" class="mobile-tabs"></nav>
+  </div>
+
+<script>
+const API = "/api";
+let token = "";
+let currentUser = null;
+let activePage = "dashboard";
+let scanner = null;
+let lastScannedPayload = null;
+const $ = id => document.getElementById(id);
+const money = value => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:2}).format(Number(value||0));
+const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const isAdmin = () => currentUser?.role === "ADMIN";
+
+async function api(path, options={}) {
+  const headers = {"Content-Type":"application/json", ...(options.headers||{})};
+  if (token) headers.Authorization = "Bearer " + token;
+  const response = await fetch(API + path, {...options, headers});
+  const data = await response.json().catch(()=>({error:"Unexpected server response."}));
+  if (response.status === 401) { logout(false); throw new Error(data.error || "Please log in again."); }
+  if (!response.ok) throw new Error(data.error || "Request failed.");
+  return data;
+}
+function showMessage(target, text, type="ok") {
+  $(target).innerHTML = `<div class="message ${type}">${esc(text)}</div>`;
+}
+function navItems() {
+  return isAdmin()
+    ? [["dashboard","▦","Dashboard"],["customers","♙","Customers"],["accounts","▤","Accounts"],["transactions","↔","Transactions"],["operations","＋","Banking operations"]]
+    : [["dashboard","▦","My account"],["accounts","▤","My accounts"],["transactions","↔","Transactions"],["qr","▦","QR Pay"],["facepay","◎","Face-to-Pay"]];
+}
+function buildNav() {
+  const items = navItems();
+  const html = items.map(([id,icon,label])=>`<button data-page="${id}" class="${activePage===id?"active":""}"><span>${icon}</span>${label}</button>`).join("");
+  $("sideNav").innerHTML = html;
+  $("mobileNav").innerHTML = items.map(([id,icon,label])=>`<button data-page="${id}" class="${activePage===id?"active":""}"><span>${icon}</span>${label}</button>`).join("");
+  document.querySelectorAll("[data-page]").forEach(btn=>btn.addEventListener("click",()=>navigate(btn.dataset.page)));
+}
+function navigate(page) {
+  if (page === "customers" && !isAdmin()) page = "dashboard";
+  if (page === "operations" && !isAdmin()) page = "dashboard";
+  activePage = page;
+  document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));
+  $("page-"+page).classList.remove("hidden");
+  $("topTitle").textContent = ({dashboard:isAdmin()?"Admin dashboard":"My account",customers:"Customer management",accounts:isAdmin()?"All accounts":"My accounts",transactions:"Transaction history",operations:"Banking operations",qr:"QR Pay",facepay:"Face-to-Pay"}[page]||"Dashboard");
+  buildNav();
+  renderPage(page).catch(err=>console.error(err));
+}
+async function renderPage(page) {
+  if(page==="dashboard") return renderDashboard();
+  if(page==="customers") return renderCustomers();
+  if(page==="accounts") return renderAccounts();
+  if(page==="transactions") return renderTransactions();
+  if(page==="operations") return renderOperations();
+  if(page==="qr") return renderQR();
+  if(page==="facepay") return renderFacePay();
+}
+async function renderDashboard() {
+  const d = await api("/dashboard");
+  if(isAdmin()) {
+    $("page-dashboard").innerHTML = `
+      <div class="welcome"><div><h1>Good day, ${esc(currentUser.name.split(" ")[0])} 👋</h1><div class="muted">Here's the current overview of your demo bank.</div></div><button onclick="navigate('customers')">＋ Add customer</button></div>
+      <div class="grid">
+        <div class="stat"><div class="label">Total customers</div><div class="value">${d.totalCustomers}</div><div class="hint">Registered customers</div></div>
+        <div class="stat"><div class="label">Total accounts</div><div class="value">${d.totalAccounts}</div><div class="hint">Savings and current</div></div>
+        <div class="stat"><div class="label">Total active balance</div><div class="value">${money(d.totalBalance)}</div><div class="hint">Across active accounts</div></div>
+        <div class="stat"><div class="label">Transactions</div><div class="value">${d.totalTransactions}</div><div class="hint">Recorded operations</div></div>
+      </div>
+      <div class="two-col"><div class="panel"><h3 class="section-title">Admin quick actions</h3><div class="actions"><button onclick="navigate('customers')">Manage customers</button><button class="secondary" onclick="navigate('accounts')">View accounts</button><button class="secondary" onclick="navigate('operations')">Deposit / withdraw</button><button class="secondary" onclick="navigate('transactions')">Transaction report</button></div></div>
+      <div class="panel"><h3 class="section-title">Project modules</h3><p class="muted small">Customer records · Account management · SQL transactions · QR demo payments · Role-based access</p><div class="notice">Use the demo accounts for your faculty presentation. This is not a production banking platform.</div></div></div>
+      <div class="panel"><h3 class="section-title">Recent transactions</h3><div id="recentTransactions" class="table-wrap"></div></div>`;
+    const t = await api("/transactions");
+    $("recentTransactions").innerHTML = transactionTable(t.transactions.slice(0,6),true);
+  } else {
+    const accounts = d.accounts || [];
+    $("page-dashboard").innerHTML = `
+      <div class="welcome"><div><h1>Hello, ${esc(currentUser.name.split(" ")[0])} 👋</h1><div class="muted">Your banking overview at a glance.</div></div><button onclick="navigate('qr')">▦ QR Pay</button></div>
+      <div class="grid">
+        <div class="stat"><div class="label">Total balance</div><div class="value">${money(d.totalBalance)}</div><div class="hint">Across your accounts</div></div>
+        <div class="stat"><div class="label">My accounts</div><div class="value">${accounts.length}</div><div class="hint">Linked to your profile</div></div>
+        <div class="stat"><div class="label">Transactions</div><div class="value">${d.totalTransactions}</div><div class="hint">Recorded activity</div></div>
+        <div class="stat"><div class="label">Account status</div><div class="value" style="font-size:20px">${accounts.every(a=>a.status==="ACTIVE")?"Active":"Review"}</div><div class="hint">Demo account status</div></div>
+      </div>
+      <div class="two-col"><div class="panel"><h3 class="section-title">My accounts</h3>${accounts.length?accounts.map(a=>`<div style="padding:13px 0;border-bottom:1px solid var(--line)"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${esc(a.account_type)} account</strong><span class="pill">${esc(a.status)}</span></div><div class="muted small" style="margin-top:6px">•••• ${esc(a.account_number.slice(-4))}</div><div style="font-size:23px;font-weight:800;margin-top:10px">${money(a.balance)}</div><button class="secondary" style="margin-top:10px" onclick="selectQRAccount('${esc(a.account_number)}')">Receive money / QR</button></div>`).join(""):'<div class="empty">No accounts found.</div>'}</div>
+      <div class="panel"><h3 class="section-title">Quick actions</h3><div class="actions"><button onclick="navigate('qr')">Scan & pay</button><button class="secondary" onclick="navigate('transactions')">Mini statement</button><button class="secondary" onclick="navigate('accounts')">Account details</button></div><div class="notice">Transfers are simulated between BankSphere demo accounts. No real money is moved.</div></div></div>
+      <div class="panel"><h3 class="section-title">Recent transactions</h3><div id="recentTransactions" class="table-wrap"></div></div>`;
+    const t = await api("/transactions");
+    $("recentTransactions").innerHTML = transactionTable(t.transactions.slice(0,5),false);
+  }
+}
+function transactionTable(rows, admin) {
+  if(!rows.length) return '<div class="empty">No transactions recorded yet.</div>';
+  return `<table><thead><tr>${admin?'<th>Customer</th>':''}<th>Type</th><th>Account</th><th>Amount</th><th>Date</th><th>Reference</th></tr></thead><tbody>${rows.map(t=>`<tr>${admin?`<td>${esc(t.full_name||"—")}</td>`:""}<td><span class="pill ${t.transaction_type==="WITHDRAWAL"||t.transaction_type==="TRANSFER_OUT"?"red":""}">${esc(t.transaction_type)}</span></td><td>${esc(t.account_number)}</td><td>${money(t.amount)}</td><td>${new Date(t.created_at).toLocaleString()}</td><td>${esc(t.reference_code)}</td></tr>`).join("")}</tbody></table>`;
+}
+async function renderCustomers() {
+  const d = await api("/customers");
+  $("page-customers").innerHTML = `<div class="welcome"><div><h1>Customer management</h1><div class="muted">Create and review demo customer profiles.</div></div></div>
+    <div class="two-col"><div class="panel"><h3 class="section-title">Add customer</h3><form id="customerForm"><div class="field"><label>Full name</label><input name="name" required></div><div class="field"><label>Email (login ID)</label><input name="email" type="email" required></div><div class="field"><label>Temporary password (8+ characters)</label><input name="password" type="password" minlength="8" required></div><div class="field"><label>Phone</label><input name="phone"></div><div class="field"><label>Address</label><input name="address"></div><div class="field"><label>Initial deposit (₹)</label><input name="initialDeposit" type="number" min="0" step=".01" value="0" required></div><div id="customerMessage"></div><button>Create customer and account</button></form></div>
+    <div class="panel"><h3 class="section-title">Customer overview</h3><div class="stat"><div class="label">Registered customers</div><div class="value">${d.customers.length}</div><div class="hint">From MySQL database</div></div><div class="notice">New customer accounts are created in the database. Give their login details to the customer for this demo.</div></div></div>
+    <div class="panel"><h3 class="section-title">All customers</h3><div class="table-wrap"><table><thead><tr><th>Customer ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Accounts</th><th>Total balance</th><th>KYC status</th></tr></thead><tbody>${d.customers.map(c=>`<tr><td>${esc(c.customer_number)}</td><td>${esc(c.full_name)}</td><td>${esc(c.email)}</td><td>${esc(c.phone||"—")}</td><td>${c.account_count}</td><td>${money(c.total_balance)}</td><td><span class="pill ${c.kyc_status==="VERIFIED"?"":"red"}">${esc(c.kyc_status)}</span></td></tr>`).join("")}</tbody></table></div></div>`;
+  $("customerForm").addEventListener("submit", async e=>{
+    e.preventDefault(); const f = new FormData(e.currentTarget);
+    try {
+      const result = await api("/customers",{method:"POST",body:JSON.stringify(Object.fromEntries(f))});
+      showMessage("customerMessage",`${result.message} Customer number: ${result.customerNumber}; account number: ${result.accountNumber}.`);
+      e.currentTarget.reset(); await renderCustomers();
+    } catch(err) { showMessage("customerMessage",err.message,"err"); }
+  });
+}
+async function renderAccounts() {
+  const d = await api("/accounts");
+  $("page-accounts").innerHTML = `<div class="welcome"><div><h1>${isAdmin()?"All bank accounts":"My accounts"}</h1><div class="muted">Account records currently stored in MySQL.</div></div></div><div class="panel"><div class="table-wrap"><table><thead><tr>${isAdmin()?"<th>Customer</th>":""}<th>Account number</th><th>Type</th><th>Balance</th><th>Status</th><th>Opened</th></tr></thead><tbody>${d.accounts.map(a=>`<tr>${isAdmin()?`<td>${esc(a.full_name)}</td>`:""}<td>${esc(a.account_number)}</td><td>${esc(a.account_type)}</td><td><strong>${money(a.balance)}</strong></td><td><span class="pill ${a.status==="ACTIVE"?"":"red"}">${esc(a.status)}</span></td><td>${new Date(a.created_at).toLocaleDateString()}</td></tr>`).join("")}</tbody></table></div>${d.accounts.length?"":'<div class="empty">No accounts available.</div>'}</div>`;
+}
+async function renderTransactions() {
+  const d = await api("/transactions");
+  $("page-transactions").innerHTML = `<div class="welcome"><div><h1>Transaction history</h1><div class="muted">${isAdmin()?"Latest 100 transactions across all demo accounts.":"Your latest 100 account transactions."}</div></div><button class="secondary" onclick="renderTransactions()">Refresh</button></div><div class="panel"><div class="table-wrap">${transactionTable(d.transactions,isAdmin())}</div></div>`;
+}
+async function renderOperations() {
+  $("page-operations").innerHTML = `<div class="welcome"><div><h1>Banking operations</h1><div class="muted">Admin-only demo deposits and withdrawals.</div></div></div><div class="two-col"><div class="panel"><h3 class="section-title">Deposit / withdraw</h3><form id="operationForm"><div class="field"><label>Account number</label><input name="accountNumber" required placeholder="e.g. 1000000001"></div><div class="field"><label>Operation</label><select name="kind"><option value="deposit">Deposit</option><option value="withdraw">Withdrawal</option></select></div><div class="field"><label>Amount (₹)</label><input name="amount" type="number" min=".01" step=".01" required></div><div class="field"><label>Description</label><input name="description" placeholder="Counter deposit"></div><div id="operationMessage"></div><button>Submit operation</button></form></div><div class="panel"><h3 class="section-title">Transfer between demo accounts</h3><form id="adminTransferForm"><div class="field"><label>From account</label><input name="fromAccountNumber" required></div><div class="field"><label>To account</label><input name="toAccountNumber" required></div><div class="field"><label>Amount (₹)</label><input name="amount" type="number" min=".01" step=".01" required></div><div id="adminTransferMessage"></div><button>Transfer demo funds</button></form><div class="notice">The server validates the balance and commits both account changes in a single SQL transaction.</div></div></div>`;
+  $("operationForm").addEventListener("submit",async e=>{
+    e.preventDefault();const data=Object.fromEntries(new FormData(e.currentTarget));const kind=data.kind;delete data.kind;
+    try{const r=await api("/"+kind,{method:"POST",body:JSON.stringify(data)});showMessage("operationMessage",`${r.message} New balance: ${money(r.balance)}`);e.currentTarget.reset();}
+    catch(err){showMessage("operationMessage",err.message,"err");}
+  });
+  $("adminTransferForm").addEventListener("submit",async e=>{
+    e.preventDefault();try{const r=await api("/transfer",{method:"POST",body:JSON.stringify(Object.fromEntries(new FormData(e.currentTarget)))});showMessage("adminTransferMessage",`${r.message} Reference: ${r.reference}`);e.currentTarget.reset();}
+    catch(err){showMessage("adminTransferMessage",err.message,"err");}
+  });
+}
+async function renderQR() {
+  const d = await api("/accounts");
+  const accounts = d.accounts;
+  $("page-qr").innerHTML = `<div class="welcome"><div><h1>QR Pay</h1><div class="muted">Scan or share a QR code for BankSphere demo transfers.</div></div></div>
+    <div class="notice">This QR format works only inside this academic application. It is not a UPI QR code.</div>
+    <div class="qr-layout"><div class="panel" style="margin-top:0"><h3 class="section-title">Receive money</h3><div class="field"><label>Select your account</label><select id="receiveAccount">${accounts.map(a=>`<option value="${esc(a.account_number)}">${esc(a.account_type)} · ${esc(a.account_number)} · ${money(a.balance)}</option>`).join("")}</select></div><div class="qr-box"><div id="qrGenerated"><span class="muted">Your QR code will appear here.</span></div></div><div class="actions" style="margin-top:12px"><button id="generateQR">Generate my QR</button><button id="downloadQR" class="secondary">Download QR</button></div><div id="qrReceiveMessage"></div></div>
+    <div class="panel" style="margin-top:0"><h3 class="section-title">Scan and pay</h3><div class="field"><label>Pay from account</label><select id="payFromAccount">${accounts.map(a=>`<option value="${esc(a.account_number)}">${esc(a.account_type)} · ${esc(a.account_number)} · ${money(a.balance)}</option>`).join("")}</select></div><button id="startScanner" class="secondary">Open camera scanner</button><div id="reader"></div><div class="field"><label>QR payload (or scan a QR)</label><textarea id="qrPayload" rows="3" style="width:100%;border:1px solid #d6deeb;border-radius:10px;padding:10px" placeholder="Scan a BankSphere QR or paste its JSON payload"></textarea></div><div class="field"><label>Amount (₹)</label><input id="qrAmount" type="number" min=".01" step=".01" placeholder="Enter amount"></div><div id="qrPayMessage"></div><button id="payQR">Confirm demo payment</button></div></div>`;
+  if(!accounts.length) { $("page-qr").insertAdjacentHTML("beforeend",'<div class="message err">No active account is available for this user.</div>'); return; }
+  $("generateQR").addEventListener("click",generateMyQR);
+  $("downloadQR").addEventListener("click",downloadQR);
+  $("startScanner").addEventListener("click",startScanner);
+  $("payQR").addEventListener("click",payQR);
+  if(window.pendingQRAccount) { $("receiveAccount").value=window.pendingQRAccount; window.pendingQRAccount=null; await generateMyQR(); }
+}
+async function generateMyQR() {
+  try {
+    const result = await api("/qr/account/"+encodeURIComponent($("receiveAccount").value));
+    $("qrGenerated").innerHTML="";
+    new QRCode($("qrGenerated"),{text:result.qr,width:210,height:210,colorDark:"#10233f",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+    showMessage("qrReceiveMessage",`QR generated for ${result.account.name} · ${result.account.accountNumber}`);
+  } catch(err) { showMessage("qrReceiveMessage",err.message,"err"); }
+}
+function downloadQR() {
+  const img=$("qrGenerated").querySelector("img");
+  const canvas=$("qrGenerated").querySelector("canvas");
+  const url=img?.src || canvas?.toDataURL("image/png");
+  if(!url) return showMessage("qrReceiveMessage","Generate the QR code first.","err");
+  const a=document.createElement("a");a.href=url;a.download="banksphere-demo-qr.png";a.click();
+}
+async function startScanner() {
+  if(!window.Html5Qrcode) return showMessage("qrPayMessage","Scanner library did not load. Check your internet connection.","err");
+  try {
+    if(scanner) { try { await scanner.stop(); } catch {} scanner=null; }
+    scanner = new Html5Qrcode("reader");
+    await scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:230,height:230}},async text=>{
+      $("qrPayload").value=text;
+      try { await scanner.stop(); } catch {}
+      showMessage("qrPayMessage","QR scanned. Check the recipient and enter the amount.");
+    },()=>{});
+    showMessage("qrPayMessage","Camera started. Allow camera access and scan a BankSphere demo QR.");
+  } catch(err) {
+    showMessage("qrPayMessage","Could not open camera. Use HTTPS or localhost and allow camera access.","err");
+  }
+}
+async function payQR() {
+  try {
+    const result=await api("/qr/pay",{method:"POST",body:JSON.stringify({
+      fromAccountNumber:$("payFromAccount").value,
+      qrPayload:$("qrPayload").value,
+      amount:$("qrAmount").value
+    })});
+    showMessage("qrPayMessage",`${result.message} Recipient: ${result.recipientAccount}. Reference: ${result.reference}`);
+    $("qrAmount").value=""; $("qrPayload").value="";
+  } catch(err) { showMessage("qrPayMessage",err.message,"err"); }
+}
+const FACE_MODEL_URL = "https://justadudewhohacks.github.io/face-api.js/models";
+let faceModelsReady = false;
+let faceCameraStream = null;
+let faceMatchToken = null;
+let faceScanTimer = null;
+
+async function loadFaceModels() {
+  if (faceModelsReady) return;
+  if (!window.faceapi) throw new Error("Face recognition library did not load. Check your internet connection and refresh.");
+  await Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
+    faceapi.nets.faceLandmark68Net.loadFromUri(FACE_MODEL_URL),
+    faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL)
+  ]);
+  faceModelsReady = true;
+}
+async function renderFacePay() {
+  let status = { enrolled: false };
+  try { status = await api("/face/status"); } catch (err) { console.warn(err); }
+  const accountsResult = await api("/accounts");
+  const accounts = accountsResult.accounts || [];
+  const enrolledText = status.enrolled ? '<span class="pill">Face enrolled</span>' : '<span class="pill red">Not enrolled</span>';
+  $("page-facepay").innerHTML = `
+    <div class="welcome"><div><h1>Face-to-Pay</h1><div class="muted">Opt-in face matching for demo transfers.</div></div>${enrolledText}</div>
+    <div class="notice"><strong>Academic demo only.</strong> Face matching can make mistakes and photos may spoof a basic model. Always verify the person, confirm the recipient, and enter your password before a simulated transfer. No real money is moved.</div>
+    <div class="two-col">
+      <div class="panel"><h3 class="section-title">1. Register or update your face</h3>
+        <p class="muted small">We capture a numerical face descriptor in your browser. The image itself is not uploaded or stored. Enrollment is optional and you can delete it.</p>
+        <label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;margin:14px 0"><input id="faceConsent" type="checkbox" style="margin-top:3px"><span>I consent to create and store a face descriptor for this BankSphere academic demo. I understand it is sensitive biometric data and can remove it below.</span></label>
+        <video id="faceVideo" autoplay muted playsinline style="display:none;width:100%;max-height:300px;object-fit:cover;border-radius:12px;background:#101828"></video>
+        <div class="actions"><button id="startEnrollCamera">Open rear camera</button><button id="saveFaceEnrollment" disabled>Capture & enroll</button></div>
+        <div id="faceEnrollMessage"></div><button id="deleteFaceEnrollment" class="danger" style="margin-top:10px">Delete my face enrollment</button>
+      </div>
+      <div class="panel"><h3 class="section-title">2. Scan a recipient</h3>
+        <p class="muted small">Ask the recipient to opt in and stand in good lighting. Scan only with their knowledge and permission.</p>
+        <video id="scanFaceVideo" autoplay muted playsinline style="display:none;width:100%;max-height:300px;object-fit:cover;border-radius:12px;background:#101828"></video>
+        <button id="startFaceScan">Open rear camera & scan</button><div id="faceMatchMessage"></div>
+        <div id="faceRecipientCard" class="notice hidden"></div>
+        <div id="facePayForm" class="hidden">
+          <div class="field"><label>Pay from account</label><select id="faceFromAccount">${accounts.map(a=>`<option value="${esc(a.account_number)}">${esc(a.account_type)} · ${esc(a.account_number)} · ${money(a.balance)}</option>`).join("")}</select></div>
+          <div class="field"><label>Amount (₹)</label><input id="facePayAmount" type="number" min="0.01" step="0.01" placeholder="Enter amount"></div>
+          <div class="field"><label>Confirm with your login password</label><input id="facePayPassword" type="password" autocomplete="current-password" placeholder="Password confirmation"></div>
+          <div id="facePaymentMessage"></div><button id="confirmFacePayment">Confirm demo payment</button>
+        </div>
+      </div>
+    </div>`;
+  $("startEnrollCamera").addEventListener("click",()=>startFaceCamera("faceVideo","faceEnrollMessage",true));
+  $("saveFaceEnrollment").addEventListener("click",enrollFace);
+  $("deleteFaceEnrollment").addEventListener("click",deleteFaceEnrollment);
+  $("startFaceScan").addEventListener("click",startFaceScan);
+  $("confirmFacePayment").addEventListener("click",submitFacePayment);
+  if (!accounts.length) { $("facePayForm").classList.add("hidden"); showMessage("faceMatchMessage","No account is available for this user.","err"); }
+}
+async function startFaceCamera(videoId, messageId, enrolling) {
+  try {
+    stopFaceCamera();
+    await loadFaceModels();
+    faceCameraStream = await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"},width:{ideal:640},height:{ideal:480}}});
+    const video = $(videoId); video.srcObject = faceCameraStream; video.style.display="block";
+    await video.play();
+    if (enrolling) $("saveFaceEnrollment").disabled=false;
+    showMessage(messageId,"Camera ready. Use good lighting and keep only one consenting face in frame.");
+  } catch (err) {
+    showMessage(messageId,err.message || "Could not open the rear camera. Use HTTPS or localhost and allow camera access.","err");
+  }
+}
+function stopFaceCamera() {
+  if (faceCameraStream) { faceCameraStream.getTracks().forEach(track=>track.stop()); faceCameraStream=null; }
+  if (faceScanTimer) { clearTimeout(faceScanTimer); faceScanTimer=null; }
+  ["faceVideo","scanFaceVideo"].forEach(id=>{const v=$(id);if(v){v.srcObject=null;v.style.display="none";}});
+}
+async function captureDescriptor(videoId) {
+  await loadFaceModels();
+  const video=$(videoId);
+  if (!video || !video.srcObject || video.readyState < 2) throw new Error("Start the camera and wait for the video to appear.");
+  const detections = await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.55})).withFaceLandmarks().withFaceDescriptors();
+  if (detections.length !== 1) throw new Error(detections.length===0 ? "No face detected. Improve lighting and try again." : "More than one face detected. Keep only one person in frame.");
+  return Array.from(detections[0].descriptor);
+}
+async function enrollFace() {
+  if (!$("faceConsent").checked) return showMessage("faceEnrollMessage","Please check the consent box before enrollment.","err");
+  try {
+    const descriptor=await captureDescriptor("faceVideo");
+    const result=await api("/face/enroll",{method:"POST",body:JSON.stringify({descriptor,consent:true})});
+    stopFaceCamera(); showMessage("faceEnrollMessage",result.message); await renderFacePay();
+  } catch(err) { showMessage("faceEnrollMessage",err.message,"err"); }
+}
+async function deleteFaceEnrollment() {
+  if (!confirm("Delete your stored face descriptor from this demo?")) return;
+  try { const result=await api("/face/enroll",{method:"DELETE"}); stopFaceCamera(); showMessage("faceEnrollMessage",result.message); await renderFacePay(); }
+  catch(err) { showMessage("faceEnrollMessage",err.message,"err"); }
+}
+async function startFaceScan() {
+  faceMatchToken=null; $("facePayForm").classList.add("hidden"); $("faceRecipientCard").classList.add("hidden");
+  await startFaceCamera("scanFaceVideo","faceMatchMessage",false);
+  if (!faceCameraStream) return;
+  showMessage("faceMatchMessage","Scanning for one face… Keep the recipient in frame.");
+  const scan = async () => {
+    if (!faceCameraStream) return;
+    try {
+      const descriptor=await captureDescriptor("scanFaceVideo");
+      const result=await api("/face/match",{method:"POST",body:JSON.stringify({descriptor})});
+      faceMatchToken=result.matchToken;
+      stopFaceCamera();
+      $("faceRecipientCard").classList.remove("hidden");
+      $("faceRecipientCard").innerHTML=`<strong>Possible recipient found</strong><br>${esc(result.recipient.name)}<br>${esc(result.recipient.accountType)} account · ${esc(result.recipient.accountNumber)}<br><span class="small">${esc(result.message)} Match expires in 2 minutes.</span>`;
+      $("facePayForm").classList.remove("hidden");
+      showMessage("faceMatchMessage","Recipient identified for confirmation. Check the person and details before paying.");
+    } catch(err) {
+      if (err.message && err.message.startsWith("No face detected")) { faceScanTimer=setTimeout(scan,700); return; }
+      showMessage("faceMatchMessage",err.message,"err");
+    }
+  };
+  faceScanTimer=setTimeout(scan,500);
+}
+async function submitFacePayment() {
+  if (!faceMatchToken) return showMessage("facePaymentMessage","Scan and verify a recipient first.","err");
+  if (!confirm("Confirm this demo transfer to the displayed recipient? Verify the person and account details first.")) return;
+  try {
+    const result=await api("/face/pay",{method:"POST",body:JSON.stringify({matchToken:faceMatchToken,fromAccountNumber:$("faceFromAccount").value,amount:$("facePayAmount").value,password:$("facePayPassword").value})});
+    faceMatchToken=null; $("facePayPassword").value=""; $("facePayAmount").value="";
+    showMessage("facePaymentMessage",`${result.message} Reference: ${result.reference}. New balance: ${money(result.balance)}`);
+  } catch(err) { showMessage("facePaymentMessage",err.message,"err"); }
+}
+
+function selectQRAccount(accountNumber) { window.pendingQRAccount=accountNumber; navigate("qr"); }
+function logout(callApi=true) {
+  token="";currentUser=null;localStorage.removeItem("banksphere_token");
+  $("appScreen").classList.add("hidden");$("loginScreen").classList.remove("hidden");
+  if(callApi) $("loginMessage").innerHTML="";
+}
+async function startApp(user) {
+  currentUser=user;
+  $("loginScreen").classList.add("hidden");$("appScreen").classList.remove("hidden");
+  $("userName").textContent=user.name;$("userRole").textContent=user.role==="ADMIN"?"Administrator":"Customer";
+  $("avatar").textContent=user.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase();
+  activePage="dashboard";buildNav();await navigate("dashboard");
+}
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();$("loginMessage").innerHTML="";
+  try{
+    const result=await fetch(API+"/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("email").value,password:$("password").value})});
+    const data=await result.json();if(!result.ok)throw new Error(data.error||"Login failed.");
+    token=data.token;localStorage.setItem("banksphere_token",token);await startApp(data.user);
+  }catch(err){showMessage("loginMessage",err.message,"err");}
+});
+$("logoutBtn").addEventListener("click",()=>logout());
+(async function boot(){
+  token=localStorage.getItem("banksphere_token")||"";
+  if(!token)return;
+  try{const data=await api("/me");await startApp(data.user);}
+  catch{logout(false);}
+})();
+</script>
+</body>
+</html>
